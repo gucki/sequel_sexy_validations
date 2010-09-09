@@ -3,6 +3,7 @@ module Sequel
     module SexyValidations
 
       def self.apply(model, opts={}, &block)
+        model.send(:include, ::SexyValidations)
       end
 
       def self.configure(model, opts={}, &block)
