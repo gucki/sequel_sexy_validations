@@ -1,6 +1,6 @@
 =About
 
-Additional sexy validators for sequel models. Depends on my sexy_validations gem.
+Additional sexy validators for sequel models. Depends on my {sexy_validations gem}[http://github.com/gucki/sexy_validations].
 
 ==Install
 
