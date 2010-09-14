@@ -10,6 +10,22 @@ module Sequel
       end
 
       module ClassMethods
+        def validates(attribute = nil, validations = nil, &block)
+          if validations
+            case validations[:if]
+              when :new
+                validations[:if] = lambda { |record| record.new? }
+            end
+
+            case validations[:unless]
+              when :new
+                validations[:unless] = lambda { |record| record.new? }
+            end
+          end
+
+          super(attribute, validations, &block)
+        end
+        
         def load_validator(name)
           begin
             require "sequel_sexy_validations/validators/#{name}"
