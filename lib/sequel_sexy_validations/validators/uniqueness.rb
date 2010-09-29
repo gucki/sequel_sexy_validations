@@ -7,8 +7,6 @@ module Sequel
           def self.validate(model, attribute, value, options)
             return unless value
 
-            return unless model.changed_columns.include?(attribute)
-
             unless options.is_a?(Hash)
               options = {
                 :scope => options,

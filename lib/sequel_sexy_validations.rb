@@ -12,14 +12,14 @@ module Sequel
       module ClassMethods
         def validates(attribute = nil, validations = nil, &block)
           if validations
-            case validations[:if]
-              when :new
-                validations[:if] = lambda { |record| record.new? }
+            if validations[:if]
+              validations[:if] = [validations[:if]] unless validations[:if].is_a?(Array)
+              implement_special_validation_conditions!(validations[:if])
             end
 
-            case validations[:unless]
-              when :new
-                validations[:unless] = lambda { |record| record.new? }
+            if validations[:unless]
+              validations[:unless] = [validations[:unless]] unless validations[:unless].is_a?(Array)
+              implement_special_validation_conditions!(validations[:unless])
             end
           end
 
@@ -32,6 +32,23 @@ module Sequel
             "Sequel::Plugins::SexyValidations::Validators::#{name.to_s.capitalize}".constantize
           rescue LoadError
             super
+          end
+        end
+        
+        private
+        
+        def implement_special_validation_conditions!(validations)
+          validations.each_with_index do |validation, i|
+            case validation
+              when :new
+                validations[i] = lambda do |record, attribute| 
+                  record.new?
+                end
+              when :changed
+                validations[i] = lambda do |record, attribute| 
+                  record.changed_columns.include?(attribute)
+                end
+            end
           end
         end
       end
