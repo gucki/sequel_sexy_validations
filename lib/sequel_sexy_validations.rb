@@ -29,7 +29,7 @@ module Sequel
         def load_validator(name)
           begin
             require "sequel_sexy_validations/validators/#{name}"
-            "Sequel::Plugins::SexyValidations::Validators::#{name.to_s.capitalize}".constantize
+            "Sequel::Plugins::SexyValidations::Validators::#{name.to_s.camelize}".constantize
           rescue LoadError
             super
           end
