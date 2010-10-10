@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sequel_sexy_validations}
-  s.version = "0.2.3"
+  s.version = "0.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Corin Langosch"]
-  s.date = %q{2010-09-29}
+  s.date = %q{2010-10-10}
   s.description = %q{Sequel plugin which provides sexy validations for model.}
   s.email = %q{info@netskin.com}
   s.extra_rdoc_files = [
