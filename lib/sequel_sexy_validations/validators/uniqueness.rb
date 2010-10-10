@@ -15,7 +15,7 @@ module Sequel
             
             options[:message] ||= "bereits vergeben"
             
-            dataset = model.class.filter(~:id => model.id, attribute => value)
+            dataset = model.class.filter(~{:id => model.id}, {attribute => value})
             if options[:scope].is_a?(Array)
               options[:scope].each do |v|
                 case v
