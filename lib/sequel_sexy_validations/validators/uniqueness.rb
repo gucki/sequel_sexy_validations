@@ -4,6 +4,21 @@ module Sequel
     module SexyValidations
       module Validators
         class Uniqueness
+          def self.apply_scope_filter!(model, dataset, filter)
+            case filter
+              when Array
+                filter.each do |filter1|
+                  apply_scope_filter!(model, dataset, filter1)
+                end
+              when Symbol
+                dataset.filter!(filter => model.send(filter))
+              when Proc
+                dataset.filter!(filter.call(model))
+              else
+                dataset.filter!(filter)
+            end
+          end
+
           def self.validate(model, attribute, value, options)
             return unless value
 
@@ -16,18 +31,7 @@ module Sequel
             options[:message] ||= "bereits vergeben"
             
             dataset = model.class.filter(~{:id => model.id}, {attribute => value})
-            if options[:scope].is_a?(Array)
-              options[:scope].each do |v|
-                case v
-                  when Symbol
-                    dataset = dataset.filter(v => model.send(v))
-                  when Proc
-                    dataset = dataset.filter(v.call(model))
-                  else
-                    dataset = dataset.filter(v)
-                end
-              end
-            end
+            apply_scope_filter!(model, dataset, options[:scope])
 
             unless dataset.empty?
               model.errors.add(attribute, options[:message])
