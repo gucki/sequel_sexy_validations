@@ -31,7 +31,9 @@ module Sequel
             options[:message] ||= "bereits vergeben"
             
             dataset = model.class.filter(~{:id => model.id}, {attribute => value})
-            apply_scope_filter!(model, dataset, options[:scope])
+            if options[:scope]
+              apply_scope_filter!(model, dataset, options[:scope])
+            end
 
             unless dataset.empty?
               model.errors.add(attribute, options[:message])
